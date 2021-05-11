@@ -6,10 +6,11 @@ import (
 	"errors"
 	"fmt"
 	"os"
-	"yuque-github-hook/yuque"
+	"yuque-github-hook/model/yuque"
 
 	"github.com/google/go-github/v35/github"
 	"github.com/tencentyun/scf-go-lib/cloudfunction"
+	"github.com/tencentyun/scf-go-lib/events"
 	"golang.org/x/oauth2"
 )
 
@@ -29,8 +30,7 @@ func main() {
 
 // payload from cloud function, should has a custom structure
 // YuQue Webhook, see https://www.yuque.com/yuque/developer/doc-webhook#4da6e742
-type CloudEvent struct {
-	// 下文后面的 `json:xxx` 是为了将代码结构体中的字段与 json 数据解耦
+type YuQueEvent struct {
 	Data       yuque.DocDetailSerializer `json:"data"`
 	Path       string                    `json:"path,omitempty"` // 文档的完整访问路径（不包括域名）
 	ActionType string                    `json:"action_type"`    // 值有 publish - 发布、 update - 更新、 delete - 删除
@@ -39,11 +39,20 @@ type CloudEvent struct {
 
 // Inspired by https://github.com/google/go-github/blob/a19996a59629e9dc2b32dc2fb8628040e6e38459/github/repos_test.go#L2213
 // github v3 rest api: https://docs.github.com/en/rest
-func dispatchGithubAction(ctx context.Context, event CloudEvent) error {
-	fmt.Printf("Current github owner: %v\n", GITHUB_OWNER)
-	fmt.Printf("Current github repo: %v\n", GITHUB_REPO)
-	fmt.Printf("Current YuQue workspace: %v\n", event.Path)
-	fmt.Printf("Current YuQue documentation: %v\n", event.Data.Title)
+// based on tencent cloud api gateway event, see https://github.com/tencentyun/scf-go-lib/blob/ccd4bf6de8cb891d5b58e49d6e03000337f9f817/events/apigw.go
+func dispatchGithubAction(ctx context.Context, request events.APIGatewayRequest) error {
+	if request.Method != "post" {
+		return errors.New(`unauthorized method`)
+	}
+	fmt.Printf("Github owner: %v\n", GITHUB_OWNER)
+	fmt.Printf("Github repo: %v\n", GITHUB_REPO)
+
+	var yuQueData *YuQueEvent
+	json.Unmarshal([]byte(request.Body), &yuQueData)
+
+	stringifiedYuQueDataBytes, _ := json.MarshalIndent(yuQueData, "", "  ")
+	fmt.Printf("Yu Que documentation: %+v\n", yuQueData.Data.Title)
+	fmt.Printf("Yu Que Payload: %+v\n", string(stringifiedYuQueDataBytes))
 
 	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: GITHUB_ACCESS_TOKEN})
 	tc := oauth2.NewClient(ctx, ts)
