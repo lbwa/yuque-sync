@@ -17,3 +17,9 @@ go clean
 ```bash
 GOOS=linux GOARCH=amd64 go build -o main main.go
 ```
+
+## Notice
+
+`YuQue repository -> settings -> advanced settings(in the SideBar) -> advanced settings(in the main content) -> enable automatic publish` item should **be disabled**, otherwise, YuQue webhook would never be triggered.
+
+More details in [YuQue Webhook](https://www.yuque.com/yuque/developer/doc-webhook).
