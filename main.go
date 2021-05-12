@@ -5,13 +5,20 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"net/http"
 	"os"
+	"regexp"
+	"strings"
 	"yuque-github-hook/model/yuque"
 
 	"github.com/google/go-github/v35/github"
 	"github.com/tencentyun/scf-go-lib/cloudfunction"
 	"github.com/tencentyun/scf-go-lib/events"
 	"golang.org/x/oauth2"
+)
+
+const (
+	YUQUE_HOST = "https://www.yuque.com"
 )
 
 var (
@@ -41,17 +48,38 @@ type YuQueEvent struct {
 // github v3 rest api: https://docs.github.com/en/rest
 // based on tencent cloud api gateway event, see https://github.com/tencentyun/scf-go-lib/blob/ccd4bf6de8cb891d5b58e49d6e03000337f9f817/events/apigw.go
 func dispatchGithubAction(ctx context.Context, request events.APIGatewayRequest) error {
-	if request.Method != "post" {
+
+	// regexp syntax, https://github.com/google/re2/wiki/Syntax
+	isAuthorizedMethod, unauthorizedMethodErr := regexp.MatchString(
+		// ignore letter case
+		"(?i)"+http.MethodPost,
+		request.Method,
+	)
+	if !isAuthorizedMethod || unauthorizedMethodErr != nil {
 		return errors.New(`unauthorized method`)
 	}
+
 	fmt.Printf("Github owner: %v\n", GITHUB_OWNER)
 	fmt.Printf("Github repo: %v\n", GITHUB_REPO)
 
 	var yuQueData *YuQueEvent
 	json.Unmarshal([]byte(request.Body), &yuQueData)
 
+	post, user := yuQueData.Data, yuQueData.Data.User
+	docUrl := strings.Join(
+		[]string{
+			YUQUE_HOST,
+			user.Login,
+			post.Book.Slug,
+			post.Book.Name,
+		},
+		"/",
+	)
+
+	fmt.Printf("Yu Que documentation: %+v\n", post.Title)
+	fmt.Printf("Yu Que documentation URL: %v\n", docUrl)
+
 	stringifiedYuQueDataBytes, _ := json.MarshalIndent(yuQueData, "", "  ")
-	fmt.Printf("Yu Que documentation: %+v\n", yuQueData.Data.Title)
 	fmt.Printf("Yu Que Payload: %+v\n", string(stringifiedYuQueDataBytes))
 
 	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: GITHUB_ACCESS_TOKEN})
