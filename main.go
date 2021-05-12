@@ -98,7 +98,7 @@ func dispatchGithubAction(ctx context.Context, request events.APIGatewayRequest)
 		return err
 	}
 
-	if response.StatusCode != 204 {
+	if response.StatusCode != http.StatusNoContent {
 		// https://gobyexample.com/json
 		// https://golang.org/pkg/encoding/json/#Marshal
 		messageBytes, _ := json.Marshal(response)
