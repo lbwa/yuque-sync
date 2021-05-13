@@ -47,7 +47,7 @@ type YuQueEvent struct {
 // Inspired by https://github.com/google/go-github/blob/a19996a59629e9dc2b32dc2fb8628040e6e38459/github/repos_test.go#L2213
 // github v3 rest api: https://docs.github.com/en/rest
 // based on tencent cloud api gateway event, see https://github.com/tencentyun/scf-go-lib/blob/ccd4bf6de8cb891d5b58e49d6e03000337f9f817/events/apigw.go
-func dispatchGithubAction(ctx context.Context, request events.APIGatewayRequest) error {
+func dispatchGithubAction(ctx context.Context, request events.APIGatewayRequest) (string, error) {
 
 	// regexp syntax, https://github.com/google/re2/wiki/Syntax
 	isAuthorizedMethod, unauthorizedMethodErr := regexp.MatchString(
@@ -56,7 +56,7 @@ func dispatchGithubAction(ctx context.Context, request events.APIGatewayRequest)
 		request.Method,
 	)
 	if !isAuthorizedMethod || unauthorizedMethodErr != nil {
-		return errors.New(`unauthorized method`)
+		return "", errors.New(`unauthorized method`)
 	}
 
 	fmt.Printf("Github owner: %v\n", GITHUB_OWNER)
@@ -69,9 +69,9 @@ func dispatchGithubAction(ctx context.Context, request events.APIGatewayRequest)
 	docUrl := strings.Join(
 		[]string{
 			YUQUE_HOST,
-			user.Login,
-			post.Book.Slug,
-			post.Book.Name,
+			user.Login,     // username
+			post.Book.Slug, // repository slug
+			post.Slug,      // post slug
 		},
 		"/",
 	)
@@ -95,16 +95,16 @@ func dispatchGithubAction(ctx context.Context, request events.APIGatewayRequest)
 
 	if err != nil {
 		fmt.Printf("Repositories.Dispatch returned error: %v", err)
-		return err
+		return "", err
 	}
 
 	if response.StatusCode != http.StatusNoContent {
 		// https://gobyexample.com/json
 		// https://golang.org/pkg/encoding/json/#Marshal
 		messageBytes, _ := json.Marshal(response)
-		return errors.New(string(messageBytes))
+		return "", errors.New(string(messageBytes))
 	}
 
 	fmt.Printf("Operation successfully: %v", repo.URL)
-	return nil
+	return http.StatusText(http.StatusOK), nil
 }
