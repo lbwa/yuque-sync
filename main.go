@@ -86,12 +86,24 @@ func dispatchGithubAction(ctx context.Context, request events.APIGatewayRequest)
 	tc := oauth2.NewClient(ctx, ts)
 	client := github.NewClient(tc)
 
+	postBodyBytes, _ := json.Marshal(struct {
+		Post string `json:"post"`
+	}{
+		Post: post.Body,
+	})
+	clientPayload := json.RawMessage(postBodyBytes)
 	// create a repository dispatch event
 	// https://docs.github.com/en/rest/reference/repos#create-a-repository-dispatch-event
-	repo, response, err := client.Repositories.Dispatch(ctx, GITHUB_OWNER, GITHUB_REPO, github.DispatchRequestOptions{
-		// EventType is a custom webhook event name.(required)
-		EventType: GITHUB_WEBHOOK_EVENT,
-	})
+	repo, response, err := client.Repositories.Dispatch(
+		ctx,
+		GITHUB_OWNER,
+		GITHUB_REPO,
+		github.DispatchRequestOptions{
+			// EventType is a custom webhook event name.(required)
+			EventType:     GITHUB_WEBHOOK_EVENT,
+			ClientPayload: &clientPayload,
+		},
+	)
 
 	if err != nil {
 		fmt.Printf("Repositories.Dispatch returned error: %v", err)
