@@ -27,7 +27,7 @@ More details in [YuQue Webhook](https://www.yuque.com/yuque/developer/doc-webhoo
 ## FAQ
 
 - Q: github rest api response 404?
-- A: Please make sure [Personal access token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) has **ALL ACCESSES(It will include write repo access we need)** in `repo` scope, especially for private repo.
+- A: Please make sure [Personal access token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) has **ALL ACCESSES** in `repo` scope, especially for private repo.
 
 ## References
 

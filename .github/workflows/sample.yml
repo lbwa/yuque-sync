@@ -42,4 +42,4 @@ jobs:
       # Retrieve event payload
       - name: Retrieve the `client_payload` value from repository_dispatch event
         run: |
-          echo "Event payload: ${{ github.event.client_payload }}"
+          echo "Event payload: ${{ github.event.client_payload.post }}"

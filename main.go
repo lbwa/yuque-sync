@@ -87,6 +87,7 @@ func dispatchGithubAction(ctx context.Context, request events.APIGatewayRequest)
 	client := github.NewClient(tc)
 
 	postBodyBytes, _ := json.Marshal(struct {
+		// should use `github.event.client_payload.post` to retrieve this payload in the action file(*.yml)
 		Post string `json:"post"`
 	}{
 		Post: post.Body,
