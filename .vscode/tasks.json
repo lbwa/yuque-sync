@@ -1,0 +1,26 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  // define custom task: https://code.visualstudio.com/docs/editor/tasks#_custom-tasks
+  // json schema: https://code.visualstudio.com/docs/editor/tasks-appendix
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build golang",
+      "type": "shell",
+      "command": "sh",
+      "options": {
+        "cwd": "${workspaceRoot}"
+      },
+      "args": [
+        "./build.sh",
+        "linux" // ./build.sh 的传参
+      ],
+      "problemMatcher": "$go",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+    }
+  ]
+}
