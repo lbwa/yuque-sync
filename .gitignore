@@ -1,2 +1,5 @@
 main
 *.zip
+node_modules
+dist
+.tsBuildInfoFile

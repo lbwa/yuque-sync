@@ -1,0 +1,12 @@
+name: 'yuque-sync'
+description: 'sync post data from yuque webhook'
+inputs:
+  github_access_token:
+    description: 'A repo scoped Github Personal Access Token'
+    required: true
+runs:
+  using: 'node15'
+  main: 'dist/index.js'
+branding:
+  icon: 'target'
+  color: 'gray-dark'
