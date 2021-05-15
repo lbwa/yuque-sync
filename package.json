@@ -28,12 +28,14 @@
   ],
   "dependencies": {
     "@actions/core": "^1.2.7",
+    "@actions/github": "^5.0.0",
     "fs-extra": "^10.0.0",
+    "func-async": "^0.1.0",
     "simple-git": "^2.39.0",
     "tslib": "^2.2.0"
   },
   "devDependencies": {
-    "@lbwa/eslint-config-typescript": "^0.4.0",
+    "@lbwa/eslint-config-typescript": "^0.4.1",
     "@lbwa/prettier-config": "^0.1.0",
     "@lbwa/tsconfig": "^0.1.0",
     "@types/fs-extra": "^9.0.11",
