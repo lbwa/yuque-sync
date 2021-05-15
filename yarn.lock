@@ -84,6 +84,11 @@
   resolved "https://registry.nlark.com/@lbwa/prettier-config/download/@lbwa/prettier-config-0.1.0.tgz#17444abdd6b00465d231c00264e4b0009227b413"
   integrity sha1-F0RKvdawBGXSMcACZOSwAJIntBM=
 
+"@lbwa/tsconfig@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.nlark.com/@lbwa/tsconfig/download/@lbwa/tsconfig-0.1.0.tgz?cache=0&sync_timestamp=1621045639151&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40lbwa%2Ftsconfig%2Fdownload%2F%40lbwa%2Ftsconfig-0.1.0.tgz#16b5c7ed3b277a0f0ab9b1509fea4c6c1eb3636a"
+  integrity sha1-FrXH7Tsneg8KubFQn+pMbB6zY2o=
+
 "@nodelib/fs.scandir@2.1.4":
   version "2.1.4"
   resolved "https://registry.nlark.com/@nodelib/fs.scandir/download/@nodelib/fs.scandir-2.1.4.tgz#d4b3549a5db5de2683e0c1071ab4f140904bbf69"
