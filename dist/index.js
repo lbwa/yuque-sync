@@ -1,45 +1,5 @@
-require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
+/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
-
-/***/ 9957:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.main = void 0;
-const tslib_1 = __nccwpck_require__(4351);
-const core_1 = __nccwpck_require__(2186);
-const github = tslib_1.__importStar(__nccwpck_require__(5438));
-const fs_extra_1 = tslib_1.__importDefault(__nccwpck_require__(5630));
-const simple_git_1 = tslib_1.__importDefault(__nccwpck_require__(1477));
-const git = simple_git_1.default(process.cwd());
-function main() {
-    return tslib_1.__awaiter(this, void 0, void 0, function* () {
-        const token = core_1.getInput("token", { required: true });
-        const docsDir = core_1.getInput("out-dir");
-        const outFile = core_1.getInput("out-file", { required: true });
-        const content = core_1.getInput("content", { required: true });
-        const username = github.context.actor || github.context.repo.owner;
-        const repoName = github.context.repo.repo;
-        const remoteOrigin = `https://${token}@github.com/${repoName}`;
-        const outFilePath = docsDir + (/\.mdx?$/.test(outFile) ? outFile : `${outFile}.md`);
-        core_1.debug('Entire output file path: ' + outFilePath);
-        yield fs_extra_1.default.outputFile(outFilePath, content);
-        if (username) {
-            yield git.addConfig('user.email', `${username}@users.noreply.github.com`);
-        }
-        yield git
-            .addConfig('user.name', username)
-            .add('.')
-            .commit('docs: update')
-            .push(remoteOrigin);
-    });
-}
-exports.main = main;
-
-
-/***/ }),
 
 /***/ 7351:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
@@ -15455,6 +15415,46 @@ module.exports = require("zlib");;
 /******/ 	}
 /******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__nccwpck_require__.n = (module) => {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
+/******/ 			__nccwpck_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__nccwpck_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__nccwpck_require__.o(definition, key) && !__nccwpck_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__nccwpck_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__nccwpck_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/compat */
 /******/ 	
 /******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";/************************************************************************/
@@ -15462,17 +15462,96 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
 (() => {
 "use strict";
-var exports = __webpack_exports__;
+// ESM COMPAT FLAG
+__nccwpck_require__.r(__webpack_exports__);
 
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const tslib_1 = __nccwpck_require__(4351);
-const func_async_1 = tslib_1.__importDefault(__nccwpck_require__(2337));
-const core_1 = __nccwpck_require__(2186);
-const action_1 = __nccwpck_require__(9957);
-(() => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
-    const [, exception] = yield func_async_1.default(action_1.main());
+// EXTERNAL MODULE: ./node_modules/tslib/tslib.js
+var tslib = __nccwpck_require__(4351);
+;// CONCATENATED MODULE: ./node_modules/tslib/modules/index.js
+
+const {
+    __extends,
+    __assign,
+    __rest,
+    __decorate,
+    __param,
+    __metadata,
+    __awaiter,
+    __generator,
+    __exportStar,
+    __createBinding,
+    __values,
+    __read,
+    __spread,
+    __spreadArrays,
+    __spreadArray,
+    __await,
+    __asyncGenerator,
+    __asyncDelegator,
+    __asyncValues,
+    __makeTemplateObject,
+    __importStar,
+    __importDefault,
+    __classPrivateFieldGet,
+    __classPrivateFieldSet,
+} = tslib;
+
+
+// EXTERNAL MODULE: ./node_modules/func-async/dist/index.js
+var dist = __nccwpck_require__(2337);
+var dist_default = /*#__PURE__*/__nccwpck_require__.n(dist);
+// EXTERNAL MODULE: ./node_modules/@actions/core/lib/core.js
+var core = __nccwpck_require__(2186);
+// EXTERNAL MODULE: ./node_modules/@actions/github/lib/github.js
+var github = __nccwpck_require__(5438);
+// EXTERNAL MODULE: ./node_modules/fs-extra/lib/index.js
+var lib = __nccwpck_require__(5630);
+var lib_default = /*#__PURE__*/__nccwpck_require__.n(lib);
+// EXTERNAL MODULE: ./node_modules/simple-git/src/index.js
+var src = __nccwpck_require__(1477);
+var src_default = /*#__PURE__*/__nccwpck_require__.n(src);
+;// CONCATENATED MODULE: ./src/action.ts
+
+
+
+
+
+const git = src_default()(process.cwd());
+function main() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const token = (0,core.getInput)("token", { required: true });
+        const docsDir = (0,core.getInput)("out-dir");
+        const outFile = (0,core.getInput)("out-file", { required: true });
+        const content = (0,core.getInput)("content", { required: true });
+        const username = github.context.actor || github.context.repo.owner;
+        const repoName = github.context.repo.repo;
+        const remoteOrigin = `https://${username}:${token}@github.com/${username}/${repoName}.git`;
+        const outFilePath = docsDir + (/\.mdx?$/.test(outFile) ? outFile : `${outFile}.md`);
+        console.log(`git remote: ${remoteOrigin}`);
+        (0,core.debug)('Entire output file path: ' + outFilePath);
+        yield lib_default().outputFile(outFilePath, content);
+        if (username) {
+            yield git.addConfig('user.email', `${username}@users.noreply.github.com`);
+        }
+        const res = yield git
+            .status()
+            .addConfig('user.name', username)
+            .add('.')
+            .commit('docs: YuQue sync ')
+            .push(remoteOrigin);
+        console.log(`res`, res);
+    });
+}
+
+;// CONCATENATED MODULE: ./src/index.ts
+
+
+
+
+(() => __awaiter(void 0, void 0, void 0, function* () {
+    const [, exception] = yield dist_default()(main());
     if (exception) {
-        core_1.setFailed(`Action failed with error ${exception.message}`);
+        (0,core.setFailed)(`Action failed with error ${exception.message}`);
     }
 }))();
 
@@ -15481,4 +15560,3 @@ const action_1 = __nccwpck_require__(9957);
 module.exports = __webpack_exports__;
 /******/ })()
 ;
-//# sourceMappingURL=index.js.map

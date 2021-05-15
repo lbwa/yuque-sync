@@ -22,7 +22,7 @@ export async function main() {
   // https://github.com/actions/checkout/blob/25a956c84d5dd820d28caab9f86b8d183aeeff3d/src/input-helper.ts#L22
   const username = github.context.actor || github.context.repo.owner
   const repoName = github.context.repo.repo
-  const remoteOrigin = `https://${token}@github.com/${repoName}`
+  const remoteOrigin = `https://${username}:${token}@github.com/${username}/${repoName}.git`
   const outFilePath =
     docsDir + (/\.mdx?$/.test(outFile) ? outFile : `${outFile}.md`)
 
@@ -37,6 +37,6 @@ export async function main() {
   await git
     .addConfig('user.name', username)
     .add('.')
-    .commit('docs: update')
+    .commit('docs: YuQue sync ')
     .push(remoteOrigin)
 }
