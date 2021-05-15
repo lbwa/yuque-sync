@@ -3,7 +3,7 @@
   "extends": "@lbwa/tsconfig",
   "compilerOptions": {
     "outDir": "dist" /* Redirect output structure to the directory. */,
-    "tsBuildInfoFile": "dist/.tsBuildInfoFile" /* Specify file to store incremental compilation information */,
+    "incremental": false,
     "removeComments": true /* Do not emit comments to output. */
   }
 }

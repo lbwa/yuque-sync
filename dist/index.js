@@ -15528,8 +15528,10 @@ function main() {
         const remoteOrigin = `https://${username}:${token}@github.com/${username}/${repoName}.git`;
         const outFilePath = (docsDir.endsWith('/') ? docsDir : `${docsDir}/`) +
             (/\.mdx?$/.test(outFile) ? outFile : `${outFile}.md`);
-        (0,core.debug)('Entire output file path: ' + outFilePath);
+        (0,core.startGroup)('Create local file');
         yield lib_default().outputFile(outFilePath, content);
+        (0,core.info)(`${outFile} has been created in ${outFilePath}`);
+        (0,core.endGroup)();
         if (username) {
             yield git.addConfig('user.email', `${username}@users.noreply.github.com`);
         }
@@ -15538,6 +15540,7 @@ function main() {
             .add('.')
             .commit('docs: YuQue sync ')
             .push(remoteOrigin);
+        (0,core.info)(`New data is available in the ${username}/${repoName}/${outFilePath}`);
     });
 }
 

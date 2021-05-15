@@ -1,4 +1,4 @@
-import { getInput, debug } from '@actions/core'
+import { getInput, info, startGroup, endGroup } from '@actions/core'
 import * as github from '@actions/github'
 import fs from 'fs-extra'
 import createGitCli from 'simple-git'
@@ -27,9 +27,10 @@ export async function main() {
     (docsDir.endsWith('/') ? docsDir : `${docsDir}/`) +
     (/\.mdx?$/.test(outFile) ? outFile : `${outFile}.md`)
 
-  // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
-  debug('Entire output file path: ' + outFilePath)
+  startGroup('Create local file')
   await fs.outputFile(outFilePath, content)
+  info(`New data is available in the ${username}/${repoName}/${outFilePath}`)
+  endGroup()
 
   if (username) {
     await git.addConfig('user.email', `${username}@users.noreply.github.com`)
@@ -38,6 +39,8 @@ export async function main() {
   await git
     .addConfig('user.name', username)
     .add('.')
-    .commit('docs: YuQue sync ')
+    .commit('docs: sync data from yuque.com')
     .push(remoteOrigin)
+
+  info(`New data has been uploaded to remote git.`)
 }
