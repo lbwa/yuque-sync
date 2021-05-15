@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.0.1](https://github.com/lbwa/yuque-github-hook/compare/v1.0.0...v1.0.1) (2021-05-15)
+
+### Bug Fixes
+
+- **action:** yml syntax error ([db7cdc0](https://github.com/lbwa/yuque-github-hook/commit/db7cdc012920bfa2fb12ee024bb6cfd166d4f038))
+
 ## 1.0.0 (2021-05-15)
 
 ### Features

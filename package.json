@@ -1,6 +1,6 @@
 {
   "name": "yuque-github-hook",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "yuque sync action based on repository_dispatch github event",
   "main": "dist/index.js",
   "repository": {
