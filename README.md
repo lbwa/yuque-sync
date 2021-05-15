@@ -1,4 +1,4 @@
-# yuque-github-hook
+# YuQue Sync
 
 Use [Repository Dispatch Event](https://docs.github.com/en/rest/reference/repos#create-a-repository-dispatch-event) to manually trigger Github Action.
 

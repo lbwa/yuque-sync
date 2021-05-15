@@ -1,19 +1,19 @@
 {
-  "name": "yuque-github-hook",
+  "name": "yuque-sync",
   "version": "1.0.1",
   "description": "yuque sync action based on repository_dispatch github event",
   "main": "dist/index.js",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/lbwa/yuque-github-hook.git"
+    "url": "git+ssh://git@github.com/lbwa/yuque-sync.git"
   },
   "author": "Liu Bowen <mr_lbw@outlook.com>",
   "license": "MIT",
   "private": false,
   "bugs": {
-    "url": "https://github.com/lbwa/yuque-github-hook/issues"
+    "url": "https://github.com/lbwa/yuque-sync/issues"
   },
-  "homepage": "https://github.com/lbwa/yuque-github-hook#readme",
+  "homepage": "https://github.com/lbwa/yuque-sync#readme",
   "scripts": {
     "prepare": "husky install",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,scss,sass,less,md}\"",

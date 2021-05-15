@@ -1,4 +1,4 @@
-module yuque-github-hook
+module yuque-sync
 
 go 1.15
 

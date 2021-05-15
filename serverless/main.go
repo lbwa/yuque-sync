@@ -9,7 +9,7 @@ import (
 	"os"
 	"regexp"
 	"strings"
-	"yuque-github-hook/model/yuque"
+	"yuque-sync/model/yuque"
 
 	"github.com/google/go-github/v35/github"
 	"github.com/tencentyun/scf-go-lib/cloudfunction"
@@ -87,10 +87,12 @@ func dispatchGithubAction(ctx context.Context, request events.APIGatewayRequest)
 	client := github.NewClient(tc)
 
 	postBodyBytes, _ := json.Marshal(struct {
+		Title string `json:"title"`
 		// should use `github.event.client_payload.post` to retrieve this payload in the action file(*.yml)
 		Post string `json:"post"`
 	}{
-		Post: post.Body,
+		Title: post.Title,
+		Post:  post.Body,
 	})
 	clientPayload := json.RawMessage(postBodyBytes)
 	// create a repository dispatch event
