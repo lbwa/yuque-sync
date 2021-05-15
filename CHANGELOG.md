@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0](https://github.com/lbwa/yuque-sync/compare/v1.0.2...v1.1.0) (2021-05-15)
+
+### Features
+
+- **action:** pretty log ([6956ac3](https://github.com/lbwa/yuque-sync/commit/6956ac3da17def9285226eb476b16359987521b0))
+
 ### [1.0.2](https://github.com/lbwa/yuque-sync/compare/v1.0.1...v1.0.2) (2021-05-15)
 
 ### Bug Fixes
