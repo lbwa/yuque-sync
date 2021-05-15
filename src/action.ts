@@ -24,7 +24,8 @@ export async function main() {
   const repoName = github.context.repo.repo
   const remoteOrigin = `https://${username}:${token}@github.com/${username}/${repoName}.git`
   const outFilePath =
-    docsDir + (/\.mdx?$/.test(outFile) ? outFile : `${outFile}.md`)
+    (docsDir.endsWith('/') ? docsDir : `${docsDir}/`) +
+    (/\.mdx?$/.test(outFile) ? outFile : `${outFile}.md`)
 
   // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
   debug('Entire output file path: ' + outFilePath)

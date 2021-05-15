@@ -15526,20 +15526,18 @@ function main() {
         const username = github.context.actor || github.context.repo.owner;
         const repoName = github.context.repo.repo;
         const remoteOrigin = `https://${username}:${token}@github.com/${username}/${repoName}.git`;
-        const outFilePath = docsDir + (/\.mdx?$/.test(outFile) ? outFile : `${outFile}.md`);
-        console.log(`git remote: ${remoteOrigin}`);
+        const outFilePath = (docsDir.endsWith('/') ? docsDir : `${docsDir}/`) +
+            (/\.mdx?$/.test(outFile) ? outFile : `${outFile}.md`);
         (0,core.debug)('Entire output file path: ' + outFilePath);
         yield lib_default().outputFile(outFilePath, content);
         if (username) {
             yield git.addConfig('user.email', `${username}@users.noreply.github.com`);
         }
-        const res = yield git
-            .status()
+        yield git
             .addConfig('user.name', username)
             .add('.')
             .commit('docs: YuQue sync ')
             .push(remoteOrigin);
-        console.log(`res`, res);
     });
 }
 

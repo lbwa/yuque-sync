@@ -20,7 +20,8 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "build": "ncc build src/index.ts -o dist",
     "watch": "tsc -p tsconfig.json -w",
-    "release": "tsc --noEmit && yarn build"
+    "package": "tsc --noEmit && yarn build",
+    "prepublish": "yarn package"
   },
   "keywords": [
     "yuque",
