@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.0.2](https://github.com/lbwa/yuque-sync/compare/v1.0.1...v1.0.2) (2021-05-15)
+
+### Bug Fixes
+
+- **action:** ensure dir slash ([3438d60](https://github.com/lbwa/yuque-sync/commit/3438d603d9d934e3dcc16151fef66e72b059d4b4))
+- **action:** remote origin syntax ([6289b12](https://github.com/lbwa/yuque-sync/commit/6289b1270dd2ee0c6812c0258fe2c0ed67b56196))
+
 ### [1.0.1](https://github.com/lbwa/yuque-github-hook/compare/v1.0.0...v1.0.1) (2021-05-15)
 
 ### Bug Fixes
