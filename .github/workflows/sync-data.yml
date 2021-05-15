@@ -1,5 +1,5 @@
 # see https://docs.github.com/en/actions
-name: example receiver repo hook
+name: 'Sync data from yuque.com'
 
 # Use repository_dispatch event to manually trigger github actions
 #  https://docs.github.com/en/actions/reference/events-that-trigger-workflows
@@ -9,7 +9,7 @@ on:
   # https://docs.github.com/en/actions/reference/events-that-trigger-workflows#repository_dispatch
   repository_dispatch:
     # parameter `event_type` field
-    types: [example-event-type]
+    types: [sync-with-yuque]
   # Triggers the workflow on push or pull request events but only for the main branch
 #   push:
 #     branches: [ main ]
@@ -48,7 +48,8 @@ jobs:
       - name: Generate local file
         uses: ./
         with:
-          github-access-token: ${{ secrets.ACCESS_TOKEN }}
+          # token field is optional
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           out-dir: 'docs'
-          out-file: ${{ github.event.client_payload.filename }}
+          out-file: ${{ github.event.client_payload.title }}
           content: ${{ github.event.client_payload.post }}
