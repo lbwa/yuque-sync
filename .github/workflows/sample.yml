@@ -40,6 +40,15 @@ jobs:
           node-version: 15.x
 
       # Retrieve event payload
+      # https://docs.github.com/en/actions/reference/context-and-expression-syntax-for-github-actions#fromjson
       - name: Retrieve the `client_payload` value from repository_dispatch event
         run: |
-          echo "Event payload: ${{ github.event.client_payload.post }}"
+          echo "Event payload: ${{ fromJSON(github.event.client_payload) }}"
+
+      - name: Generate local file
+        uses: ./
+        with:
+          github-access-token: ${{ secrets.ACCESS_TOKEN }}
+          out-dir: 'docs'
+          out-file: ${{ github.event.client_payload.filename }}
+          content: ${{ github.event.client_payload.post }}

@@ -1,0 +1,9 @@
+{
+  /* Visit https://aka.ms/tsconfig.json to read more about this file */
+  "extends": "@lbwa/tsconfig",
+  "compilerOptions": {
+    "outDir": "dist" /* Redirect output structure to the directory. */,
+    "tsBuildInfoFile": ".tsBuildInfoFile" /* Specify file to store incremental compilation information */,
+    "removeComments": true /* Do not emit comments to output. */
+  }
+}

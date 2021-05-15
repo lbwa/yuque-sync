@@ -2,7 +2,26 @@
 
 Use [Repository Dispatch Event](https://docs.github.com/en/rest/reference/repos#create-a-repository-dispatch-event) to manually trigger Github Action.
 
-## Usage
+## Github Action
+
+```yml
+- name: Generate local file
+  uses: lbwa/sync-yuque@v1
+  with:
+    token: ${{ secrets.ACCESS_TOKEN }}
+    out-dir: 'docs'
+    out-file: ${{ github.event.client_payload.filename }}
+    content: ${{ github.event.client_payload.post }}
+```
+
+|   name   |                 description                 | default  |
+| :------: | :-----------------------------------------: | :------: |
+|  token   | A repo scoped Github Personal Access Token  |   N/A    |
+| out-dir  | Where should our documentations be place in | `'docs'` |
+| out-file |       As generated markdown file name       |   N/A    |
+| content  |     As generated markdown file content      |   N/A    |
+
+## Serverless function
 
 - clear building
 
@@ -31,5 +50,5 @@ More details in [YuQue Webhook](https://www.yuque.com/yuque/developer/doc-webhoo
 
 ## References
 
-- https://docs.github.com/en/rest/reference/repos#create-a-repository-dispatch-event
-- https://docs.github.com/en/actions/reference/events-that-trigger-workflows#repository_dispatch
+- [create a repository dispatch event](https://docs.github.com/en/rest/reference/repos#create-a-repository-dispatch-event)
+- [event that trigger workflow](https://docs.github.com/en/actions/reference/events-that-trigger-workflows#repository_dispatch)
