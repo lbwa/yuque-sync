@@ -18,10 +18,8 @@
     "prepare": "husky install",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,scss,sass,less,md}\"",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "build": "ncc build src/index.ts -o dist",
-    "watch": "tsc -p tsconfig.json -w",
-    "package": "tsc --noEmit && yarn build",
-    "prepublish": "yarn package"
+    "build": "tsc --noEmit & ncc build src/index.ts -o dist -m -C --target es2016 -t",
+    "watch": "tsc -p tsconfig.json -w"
   },
   "keywords": [
     "yuque",
