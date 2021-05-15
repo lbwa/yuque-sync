@@ -4,7 +4,7 @@ import fs from 'fs-extra'
 import createGitCli from 'simple-git'
 
 const enum Input {
-  TOKEN = 'github-access-token',
+  TOKEN = 'token',
   OUT_DIR = 'out-dir',
   OUT_FILE = 'out-file',
   CONTENT = 'content'
