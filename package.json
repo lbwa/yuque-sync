@@ -1,6 +1,6 @@
 {
   "name": "yuque-sync",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "yuque sync action based on repository_dispatch github event",
   "main": "dist/index.js",
   "repository": {
@@ -19,12 +19,16 @@
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,scss,sass,less,md}\"",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "build": "tsc -p tsconfig.json",
-    "watch": "yarn build -w"
+    "watch": "yarn build -w",
+    "prepublish": "yarn build"
   },
   "keywords": [
     "yuque",
     "github",
     "sync"
+  ],
+  "files": [
+    "dist"
   ],
   "dependencies": {
     "@actions/core": "^1.2.7",

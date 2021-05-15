@@ -1,4 +1,5 @@
 name: 'yuque-sync'
+author: 'Liu Bowen'
 description: 'sync post data from yuque webhook'
 inputs:
   github-access-token:
