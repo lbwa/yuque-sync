@@ -6,7 +6,7 @@ Use [Repository Dispatch Event](https://docs.github.com/en/rest/reference/repos#
 
 ```yml
 - name: Generate local file
-  uses: lbwa/sync-yuque@v1
+  uses: lbwa/yuque-sync@v1
   with:
     token: ${{ secrets.ACCESS_TOKEN }}
     out-dir: 'docs'

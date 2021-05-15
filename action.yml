@@ -1,6 +1,6 @@
-name: 'Sync YuQue'
-author: 'Liu Bowen'
+name: 'YuQue Sync'
 description: 'Sync post data from YuQue webhook'
+author: 'Liu Bowen'
 inputs:
   token:
     description: >
@@ -12,16 +12,16 @@ inputs:
       [Learn more about creating and using encrypted secrets](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/creating-and-using-encrypted-secrets)
     default: ${{ github.token }}
   out-dir:
-    description: "Where should our documentations be place in",
+    description: 'Where should our documentations be place in'
     default: 'docs'
   out-file:
     description: 'As generated markdown file name'
     required: true
   content:
-    description: 'As generated markdown file content',
+    description: 'As generated markdown file content'
     required: true
 runs:
-  using: 'node15'
+  using: 'node12'
   main: 'dist/index.js'
 branding:
   icon: 'git-branch'
