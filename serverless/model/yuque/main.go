@@ -23,6 +23,11 @@ type DocDetailSerializer struct {
 	DeletedAt       string         `json:"deleted_at,omitempty"`         //删除时间，未删除为 null
 	CreatedAt       string         `json:"created_at,omitempty"`         //创建时间
 	UpdatedAt       string         `json:"updated_at,omitempty"`         //更新时间
+
+	Publish          bool   `json:"publish"`                      // 文档是否为第一次发布，第一次发布时为 true
+	ActionType       string `json:"action_type"`                  // 值有 publish - 发布、 update - 更新、 delete - 删除
+	Path             string `json:"path,omitempty"`               // 文档的完整访问路径（不包括域名）
+	FirstPublishedAt string `json:"first_published_at,omitempty"` // 首次发布时间
 }
 
 // 一般在列表的场景返回的仓库信息。
