@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"net/http"
 	"os"
 	"regexp"
@@ -14,6 +13,7 @@ import (
 	"github.com/google/go-github/v35/github"
 	"github.com/tencentyun/scf-go-lib/cloudfunction"
 	"github.com/tencentyun/scf-go-lib/events"
+	"go.uber.org/zap"
 	"golang.org/x/oauth2"
 )
 
@@ -22,10 +22,10 @@ const (
 )
 
 var (
-	GITHUB_OWNER         = os.Getenv("GITHUB_OWNER")
-	GITHUB_REPO          = os.Getenv("GITHUB_REPO")
-	GITHUB_ACCESS_TOKEN  = os.Getenv("GITHUB_ACCESS_TOKEN")
-	GITHUB_WEBHOOK_EVENT = os.Getenv("GITHUB_WEBHOOK_EVENT")
+	GITHUB_OWNER    = os.Getenv("GITHUB_OWNER")
+	GITHUB_REPO     = os.Getenv("GITHUB_REPO")
+	GITHUB_PAT      = os.Getenv("GITHUB_PAT")      // Github personal access token
+	GITHUB_RD_EVENT = os.Getenv("GITHUB_RD_EVENT") // repository_dispatch event type
 )
 
 func main() {
@@ -38,16 +38,23 @@ func main() {
 // payload from cloud function, should has a custom structure
 // YuQue Webhook, see https://www.yuque.com/yuque/developer/doc-webhook#4da6e742
 type YuQueEvent struct {
-	Data       yuque.DocDetailSerializer `json:"data"`
-	Path       string                    `json:"path,omitempty"` // 文档的完整访问路径（不包括域名）
-	ActionType string                    `json:"action_type"`    // 值有 publish - 发布、 update - 更新、 delete - 删除
-	Publish    bool                      `json:"publish"`        // 文档是否为第一次发布，第一次发布时为 true
+	Data yuque.DocDetailSerializer `json:"data"`
+
+	// 下文三个字段暂时弃用，实际与文档不符，见 DocDetailSerializer 中同名字段
+	// Path       string                    `json:"path,omitempty"`        // 文档的完整访问路径（不包括域名）
+	// ActionType string                    `json:"action_type,omitempty"` // 值有 publish - 发布、 update - 更新、 delete - 删除
+	// Publish    bool                      `json:"publish,omitempty"`     // 文档是否为第一次发布，第一次发布时为 true
 }
 
 // Inspired by https://github.com/google/go-github/blob/a19996a59629e9dc2b32dc2fb8628040e6e38459/github/repos_test.go#L2213
 // github v3 rest api: https://docs.github.com/en/rest
 // based on tencent cloud api gateway event, see https://github.com/tencentyun/scf-go-lib/blob/ccd4bf6de8cb891d5b58e49d6e03000337f9f817/events/apigw.go
 func dispatchGithubAction(ctx context.Context, request events.APIGatewayRequest) (string, error) {
+	// Debug level enabled by default in development
+	// Info level enabled by default in production
+	logger, _ := zap.NewDevelopment()
+	defer logger.Sync()
+	sugar := logger.Sugar()
 
 	// regexp syntax, https://github.com/google/re2/wiki/Syntax
 	isAuthorizedMethod, unauthorizedMethodErr := regexp.MatchString(
@@ -59,8 +66,8 @@ func dispatchGithubAction(ctx context.Context, request events.APIGatewayRequest)
 		return "", errors.New(`unauthorized method`)
 	}
 
-	fmt.Printf("Github owner: %v\n", GITHUB_OWNER)
-	fmt.Printf("Github repo: %v\n", GITHUB_REPO)
+	sugar.Debug("Github owner: ", GITHUB_OWNER)
+	sugar.Debug("Github repo: ", GITHUB_REPO)
 
 	var yuQueData *YuQueEvent
 	json.Unmarshal([]byte(request.Body), &yuQueData)
@@ -76,13 +83,14 @@ func dispatchGithubAction(ctx context.Context, request events.APIGatewayRequest)
 		"/",
 	)
 
-	fmt.Printf("Yu Que documentation: %+v\n", post.Title)
-	fmt.Printf("Yu Que documentation URL: %v\n", docUrl)
+	sugar.Debug("YuQue post action", post.ActionType)
+	sugar.Debug("YuQue post title: ", post.Title)
+	sugar.Debug("YuQue post URL: ", docUrl)
 
-	stringifiedYuQueDataBytes, _ := json.MarshalIndent(yuQueData, "", "  ")
-	fmt.Printf("Yu Que Payload: %+v\n", string(stringifiedYuQueDataBytes))
+	stringifiedBodyBytes, _ := json.MarshalIndent(yuQueData.Data.Body, "", "  ")
+	sugar.Debug("YuQue post body: ", string(stringifiedBodyBytes))
 
-	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: GITHUB_ACCESS_TOKEN})
+	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: GITHUB_PAT})
 	tc := oauth2.NewClient(ctx, ts)
 	client := github.NewClient(tc)
 
@@ -103,13 +111,13 @@ func dispatchGithubAction(ctx context.Context, request events.APIGatewayRequest)
 		GITHUB_REPO,
 		github.DispatchRequestOptions{
 			// EventType is a custom webhook event name.(required)
-			EventType:     GITHUB_WEBHOOK_EVENT,
+			EventType:     GITHUB_RD_EVENT,
 			ClientPayload: &clientPayload,
 		},
 	)
 
 	if err != nil {
-		fmt.Printf("Repositories.Dispatch returned error: %v", err)
+		sugar.Debug("Repositories.Dispatch returned error: ", err)
 		return "", err
 	}
 
@@ -120,6 +128,6 @@ func dispatchGithubAction(ctx context.Context, request events.APIGatewayRequest)
 		return "", errors.New(string(messageBytes))
 	}
 
-	fmt.Printf("Operation successfully: %v", repo.URL)
+	sugar.Debug("Operation successfully: ", repo.HTMLURL)
 	return http.StatusText(http.StatusOK), nil
 }
