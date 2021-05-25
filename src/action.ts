@@ -39,7 +39,9 @@ export async function main() {
   await git
     .addConfig('user.name', username)
     .add('.')
-    .commit('docs: sync data from yuque.com')
+    .commit(`docs: sync \`${outFile.slice(0, 24)}\` from yuque.com`, [
+      '--signoff'
+    ])
     .push(remoteOrigin)
 
   info(`New data has been uploaded to remote git.`)
