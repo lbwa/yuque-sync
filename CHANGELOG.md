@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.0](https://github.com/lbwa/yuque-sync/compare/v1.1.0...v1.2.0) (2021-05-25)
+
+### Features
+
+- **action:** commit message with title ([f4bdb9d](https://github.com/lbwa/yuque-sync/commit/f4bdb9ddb726b77b53c415edcef6e62c35c0ed90))
+- **serverless:** use zap as default logger ([#6](https://github.com/lbwa/yuque-sync/issues/6)) ([69ee176](https://github.com/lbwa/yuque-sync/commit/69ee17682389a6906a6f17b88b8b39f4464c1026))
+
 ## [1.1.0](https://github.com/lbwa/yuque-sync/compare/v1.0.2...v1.1.0) (2021-05-15)
 
 ### Features
