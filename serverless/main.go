@@ -72,22 +72,26 @@ func dispatchGithubAction(ctx context.Context, request events.APIGatewayRequest)
 	var yuQueData *YuQueEvent
 	json.Unmarshal([]byte(request.Body), &yuQueData)
 
-	post, user := yuQueData.Data, yuQueData.Data.User
-	docUrl := strings.Join(
-		[]string{
-			YUQUE_HOST,
-			user.Login,     // username
-			post.Book.Slug, // repository slug
-			post.Slug,      // post slug
-		},
-		"/",
-	)
+	postMeta := yuQueData.Data
+	user, post := postMeta.User, postMeta.Body
 
-	sugar.Debug("YuQue post action", post.ActionType)
-	sugar.Debug("YuQue post title: ", post.Title)
+	docUrlParts := []string{YUQUE_HOST}
+	if postMeta.Path != "" {
+		docUrlParts = append(docUrlParts, postMeta.Path)
+	} else {
+		docUrlParts = append(docUrlParts, []string{
+			user.Login,         // username
+			postMeta.Book.Slug, // repository slug
+			postMeta.Slug,      // post slug
+		}...)
+	}
+	docUrl := strings.Join(docUrlParts, "/")
+
+	sugar.Debug("YuQue post action: ", postMeta.ActionType)
+	sugar.Debug("YuQue post title: ", postMeta.Title)
 	sugar.Debug("YuQue post URL: ", docUrl)
 
-	stringifiedBodyBytes, _ := json.MarshalIndent(yuQueData.Data.Body, "", "  ")
+	stringifiedBodyBytes, _ := json.MarshalIndent(post, "", "  ")
 	sugar.Debug("YuQue post body: ", string(stringifiedBodyBytes))
 
 	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: GITHUB_PAT})
@@ -99,8 +103,8 @@ func dispatchGithubAction(ctx context.Context, request events.APIGatewayRequest)
 		// should use `github.event.client_payload.post` to retrieve this payload in the action file(*.yml)
 		Post string `json:"post"`
 	}{
-		Title: post.Title,
-		Post:  post.Body,
+		Title: postMeta.Title,
+		Post:  post,
 	})
 	clientPayload := json.RawMessage(postBodyBytes)
 	// create a repository dispatch event
