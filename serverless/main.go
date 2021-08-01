@@ -39,11 +39,6 @@ func main() {
 // YuQue Webhook, see https://www.yuque.com/yuque/developer/doc-webhook#4da6e742
 type YuQueEvent struct {
 	Data yuque.DocDetailSerializer `json:"data"`
-
-	// 下文三个字段暂时弃用，实际与文档不符，见 DocDetailSerializer 中同名字段
-	// Path       string                    `json:"path,omitempty"`        // 文档的完整访问路径（不包括域名）
-	// ActionType string                    `json:"action_type,omitempty"` // 值有 publish - 发布、 update - 更新、 delete - 删除
-	// Publish    bool                      `json:"publish,omitempty"`     // 文档是否为第一次发布，第一次发布时为 true
 }
 
 // Inspired by https://github.com/google/go-github/blob/a19996a59629e9dc2b32dc2fb8628040e6e38459/github/repos_test.go#L2213
@@ -75,17 +70,17 @@ func dispatchGithubAction(ctx context.Context, request events.APIGatewayRequest)
 	postMeta := yuQueData.Data
 	user, post := postMeta.User, postMeta.Body
 
-	docUrlParts := []string{YUQUE_HOST}
+	docPathParts := []string{}
 	if postMeta.Path != "" {
-		docUrlParts = append(docUrlParts, postMeta.Path)
+		docPathParts = append(docPathParts, postMeta.Path)
 	} else {
-		docUrlParts = append(docUrlParts, []string{
+		docPathParts = append(docPathParts, []string{
 			user.Login,         // username
 			postMeta.Book.Slug, // repository slug
 			postMeta.Slug,      // post slug
 		}...)
 	}
-	docUrl := strings.Join(docUrlParts, "/")
+	docUrl := strings.Join(append([]string{YUQUE_HOST}, docPathParts...), "/")
 
 	sugar.Debug("YuQue post action: ", postMeta.ActionType)
 	sugar.Debug("YuQue post title: ", postMeta.Title)
@@ -99,12 +94,16 @@ func dispatchGithubAction(ctx context.Context, request events.APIGatewayRequest)
 	client := github.NewClient(tc)
 
 	postBodyBytes, _ := json.Marshal(struct {
-		Title string `json:"title"`
+		Id    yuque.YuQueId `json:"id"`
+		Title string        `json:"title"`
 		// should use `github.event.client_payload.post` to retrieve this payload in the action file(*.yml)
 		Post string `json:"post"`
+		Path string `json:"path"`
 	}{
+		Id:    postMeta.Id,
 		Title: postMeta.Title,
 		Post:  post,
+		Path:  strings.Join(docPathParts, "/"),
 	})
 	clientPayload := json.RawMessage(postBodyBytes)
 	// create a repository dispatch event
