@@ -1,7 +1,7 @@
 import { getInput, info, startGroup, endGroup } from '@actions/core'
 import * as github from '@actions/github'
 import fs from 'fs-extra'
-import createGitCli from 'simple-git'
+import { $ } from 'zx'
 
 const enum Input {
   TOKEN = 'token',
@@ -9,8 +9,6 @@ const enum Input {
   OUT_FILE = 'out-file',
   CONTENT = 'content'
 }
-
-const git = createGitCli(process.cwd())
 
 export async function main() {
   const token = getInput(Input.TOKEN, { required: true })
@@ -33,16 +31,17 @@ export async function main() {
   endGroup()
 
   if (username) {
-    await git.addConfig('user.email', `${username}@users.noreply.github.com`)
+    await Promise.all([
+      $`git config user.email ${username}@users.noreply.github.com`,
+      $`git config user.name "${username}"`
+    ])
   }
 
-  await git
-    .addConfig('user.name', username)
-    .add('.')
-    .commit(`docs: sync \`${outFile.slice(0, 24)}\` from yuque.com`, [
-      '--signoff'
-    ])
-    .push(remoteOrigin)
+  const nameOnlyForLog =
+    outFile.length > 24 ? `${outFile.slice(0, 21)}...` : outFile
+  await $`git add .`
+  await $`git commit -s -m \"docs: sync \`${nameOnlyForLog}\` from yuque.com\"`
+  await $`git push ${remoteOrigin}`
 
   info(`New data has been uploaded to remote git.`)
 }

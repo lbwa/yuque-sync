@@ -34,8 +34,8 @@
     "@actions/github": "^5.0.0",
     "fs-extra": "^10.0.0",
     "func-async": "^0.1.0",
-    "simple-git": "^2.39.0",
-    "tslib": "^2.2.0"
+    "tslib": "^2.2.0",
+    "zx": "^2.0.0"
   },
   "devDependencies": {
     "@lbwa/eslint-config-typescript": "^0.4.1",
