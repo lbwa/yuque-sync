@@ -14,11 +14,8 @@ inputs:
   out-dir:
     description: 'Where should our documentations be place in'
     default: 'docs'
-  out-file:
-    description: 'As generated markdown file name'
-    required: true
-  content:
-    description: 'As generated markdown file content'
+  client-payload:
+    description: 'An request payload from Github Repository Dispatch Event'
     required: true
 runs:
   using: 'node12'

@@ -37,7 +37,7 @@ jobs:
           # Set always-auth in npmrc
           always-auth: false # optional, default is false
           # Version Spec of the version to use.  Examples: 12.x, 10.15.1, >=10.15.0
-          node-version: 15.x
+          node-version: 16.x
 
       # Retrieve event payload
       # https://docs.github.com/en/actions/reference/context-and-expression-syntax-for-github-actions#fromjson
@@ -51,5 +51,5 @@ jobs:
           # token field is optional
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           out-dir: 'docs'
-          out-file: ${{ github.event.client_payload.title }}
-          content: ${{ github.event.client_payload.post }}
+          # https://docs.github.com/en/actions/reference/context-and-expression-syntax-for-github-actions#fromjson
+          client-payload: ${{ fromJSON(github.event.client_payload) }}

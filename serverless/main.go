@@ -41,6 +41,14 @@ type YuQueEvent struct {
 	Data yuque.DocDetailSerializer `json:"data"`
 }
 
+// should use `github.event.client_payload.post` to retrieve `Post` field in the repository action file(*.yml)
+type GithubClientPayload struct {
+	Id    yuque.YuQueId `json:"id"`
+	Title string        `json:"title"`
+	Post  string        `json:"post"`
+	Path  string        `json:"path"`
+}
+
 // Inspired by https://github.com/google/go-github/blob/a19996a59629e9dc2b32dc2fb8628040e6e38459/github/repos_test.go#L2213
 // github v3 rest api: https://docs.github.com/en/rest
 // based on tencent cloud api gateway event, see https://github.com/tencentyun/scf-go-lib/blob/ccd4bf6de8cb891d5b58e49d6e03000337f9f817/events/apigw.go
@@ -93,19 +101,11 @@ func dispatchGithubAction(ctx context.Context, request events.APIGatewayRequest)
 	tc := oauth2.NewClient(ctx, ts)
 	client := github.NewClient(tc)
 
-	postBodyBytes, _ := json.Marshal(struct {
-		Id    yuque.YuQueId `json:"id"`
-		Title string        `json:"title"`
-		// should use `github.event.client_payload.post` to retrieve this payload in the action file(*.yml)
-		Post string `json:"post"`
-		Path string `json:"path"`
-	}{
-		Id:    postMeta.Id,
-		Title: postMeta.Title,
-		Post:  post,
-		Path:  strings.Join(docPathParts, "/"),
-	})
-	clientPayload := json.RawMessage(postBodyBytes)
+	clientPayload, err := serializeClientPayload(postMeta.Id, postMeta.Title, post, strings.Join(docPathParts, "/"))
+	if err != nil {
+		sugar.Debug("Got error when marshal GithubClientPayload: ", err)
+		return "", err
+	}
 	// create a repository dispatch event
 	// https://docs.github.com/en/rest/reference/repos#create-a-repository-dispatch-event
 	repo, response, err := client.Repositories.Dispatch(
@@ -133,4 +133,17 @@ func dispatchGithubAction(ctx context.Context, request events.APIGatewayRequest)
 
 	sugar.Debug("Operation successfully: ", repo.HTMLURL)
 	return http.StatusText(http.StatusOK), nil
+}
+
+func serializeClientPayload(id yuque.YuQueId, title, post, filepath string) (msg json.RawMessage, err error) {
+	rawBytes, err := json.Marshal(GithubClientPayload{
+		Id:    id,
+		Title: title,
+		Post:  post,
+		Path:  filepath,
+	})
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.RawMessage(rawBytes), nil
 }
