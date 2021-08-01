@@ -18,7 +18,7 @@
     "prepare": "husky install",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,scss,sass,less,md}\"",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "build": "tsc --noEmit & ncc build src/index.ts -o dist -m -C --target es2016 -t",
+    "build": "tsc --noEmit & esbuild src/index.ts --bundle --platform=node --outdir=dist --target=node14 --tsconfig=tsconfig.json",
     "watch": "tsc -p tsconfig.json -w"
   },
   "keywords": [
@@ -46,7 +46,7 @@
     "@types/lodash": "^4.14.170",
     "@typescript-eslint/eslint-plugin": "^4.23.0",
     "@typescript-eslint/parser": "^4.23.0",
-    "@vercel/ncc": "^0.28.5",
+    "esbuild": "^0.12.17",
     "eslint": "^7.26.0",
     "husky": "^6.0.0",
     "lint-staged": "^11.0.0",

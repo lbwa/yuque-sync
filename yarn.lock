@@ -321,11 +321,6 @@
     "@typescript-eslint/types" "4.23.0"
     eslint-visitor-keys "^2.0.0"
 
-"@vercel/ncc@^0.28.5":
-  version "0.28.5"
-  resolved "https://registry.nlark.com/@vercel/ncc/download/@vercel/ncc-0.28.5.tgz#6d735379f81b70b708a9c3d2196507b2a841824f"
-  integrity sha1-bXNTefgbcLcIqcPSGWUHsqhBgk8=
-
 acorn-jsx@^5.3.1:
   version "5.3.1"
   resolved "https://registry.npm.taobao.org/acorn-jsx/download/acorn-jsx-5.3.1.tgz?cache=0&sync_timestamp=1599546317194&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Facorn-jsx%2Fdownload%2Facorn-jsx-5.3.1.tgz#fc8661e11b7ac1539c47dbfea2e72b3af34d267b"
@@ -699,6 +694,11 @@ es-to-primitive@^1.2.1:
     is-callable "^1.1.4"
     is-date-object "^1.0.1"
     is-symbol "^1.0.2"
+
+esbuild@^0.12.17:
+  version "0.12.17"
+  resolved "https://registry.nlark.com/esbuild/download/esbuild-0.12.17.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fesbuild%2Fdownload%2Fesbuild-0.12.17.tgz#5816f905c2905de0ebbc658860df7b5b48afbcd3"
+  integrity sha1-WBb5BcKQXeDrvGWIYN97W0ivvNM=
 
 escape-string-regexp@^1.0.5:
   version "1.0.5"
