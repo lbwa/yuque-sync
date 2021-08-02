@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.1](https://github.com/lbwa/yuque-sync/compare/v2.0.0...v2.0.1) (2021-08-02)
+
+### Bug Fixes
+
+- use node12 to be action runtime ([0b72f7b](https://github.com/lbwa/yuque-sync/commit/0b72f7b40c68c1d232dc83558e2e7ca20675bf16))
+
 ## [2.0.0](https://github.com/lbwa/yuque-sync/compare/v1.2.0...v2.0.0) (2021-08-02)
 
 ### Features
