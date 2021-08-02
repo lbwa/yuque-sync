@@ -1,6 +1,6 @@
 {
   "name": "yuque-sync",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "yuque sync action based on repository_dispatch github event",
   "main": "dist/index.js",
   "repository": {
