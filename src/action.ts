@@ -53,8 +53,8 @@ export async function main() {
   endGroup()
 
   if (username) {
-    runGit(['user.email', `${username}@users.noreply.github.com`])
-    runGit(['user.name', `"${username}"`])
+    runGit(['config', 'user.email', `${username}@users.noreply.github.com`])
+    runGit(['config', 'user.name', `"${username}"`])
   }
 
   const nameOnlyForLog =
