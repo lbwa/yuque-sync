@@ -18,7 +18,7 @@
     "prepare": "husky install",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,scss,sass,less,md}\"",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "build": "tsc --noEmit & esbuild src/index.ts --bundle --minify --platform=node --outdir=dist --target=node14 --tsconfig=tsconfig.json",
+    "build": "tsc --noEmit & esbuild src/index.ts --bundle --minify --platform=node --outdir=dist --target=node12 --tsconfig=tsconfig.json",
     "watch": "tsc -p tsconfig.json -w"
   },
   "keywords": [
