@@ -8,20 +8,18 @@ Use [Repository Dispatch Event](https://docs.github.com/en/rest/reference/repos#
 
 ```yml
 - name: Generate local file
-  uses: lbwa/yuque-sync@v1
+  uses: lbwa/yuque-sync@v2.0.3
   with:
     token: ${{ secrets.ACCESS_TOKEN }}
     out-dir: 'docs'
-    out-file: ${{ github.event.client_payload.title }}
-    content: ${{ github.event.client_payload.post }}
+    client-payload: ${{toJson(github.event.client_payload)}}
 ```
 
-|   name   |                 description                 | default  |
-| :------: | :-----------------------------------------: | :------: |
-|  token   | A repo scoped Github Personal Access Token  |   N/A    |
-| out-dir  | Where should our documentations be place in | `'docs'` |
-| out-file |       As generated markdown file name       |   N/A    |
-| content  |     As generated markdown file content      |   N/A    |
+|      name      |                       description                       | default  |
+| :------------: | :-----------------------------------------------------: | :------: |
+|     token      |       A repo scoped Github Personal Access Token        |   N/A    |
+|    out-dir     |       Where should our documentations be place in       | `'docs'` |
+| client-payload | A request payload from Github Repository Dispatch Event |   N/A    |
 
 ## Serverless function
 

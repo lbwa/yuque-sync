@@ -1,5 +1,5 @@
 {
-  "name": "yuque-sync",
+  "name": "sync-yuque-data",
   "version": "2.0.3",
   "description": "yuque sync action based on repository_dispatch github event",
   "main": "dist/index.js",
