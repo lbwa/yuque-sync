@@ -1,6 +1,15 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+## [2.0.0](https://github.com/lbwa/yuque-sync/compare/v1.2.0...v2.0.0) (2021-08-02)
+
+### Features
+
+- add YuQueId, path into github evt payload ([34734cb](https://github.com/lbwa/yuque-sync/commit/34734cb9df4427660644073e871e4a6505b1bf9f))
+- **serverless:** support doc action_type ([b1d1ab1](https://github.com/lbwa/yuque-sync/commit/b1d1ab142cc283eefdebd181427875d80702d0eb))
+- use ClientPayload ([fb29b59](https://github.com/lbwa/yuque-sync/commit/fb29b59d23a97f380fd87181f01ab43f1598247f))
+- use zx to run sub commands ([647ab04](https://github.com/lbwa/yuque-sync/commit/647ab04b39e72ad8a2f3be196a373c73f55da25c))
 
 ## [1.2.0](https://github.com/lbwa/yuque-sync/compare/v1.1.0...v1.2.0) (2021-05-25)
 
