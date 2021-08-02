@@ -64,7 +64,7 @@ export async function main() {
     'commit',
     '-s',
     '-m',
-    `"docs: sync \`${nameOnlyForLog}\` from yuque.com"`
+    `docs: sync \`${nameOnlyForLog}\` from yuque.com`
   ])
   runGit(['push', remoteOrigin])
 
