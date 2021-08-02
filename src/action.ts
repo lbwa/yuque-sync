@@ -1,7 +1,7 @@
 import { getInput, info, startGroup, endGroup, setFailed } from '@actions/core'
 import * as github from '@actions/github'
 import fs from 'fs-extra'
-import { $ } from 'zx'
+import spawn from 'cross-spawn'
 import isString from 'lodash/isString'
 
 const enum Input {
@@ -11,6 +11,10 @@ const enum Input {
 }
 
 type ClientPayload = { id: number; title: string; post: string; path: string }
+
+function runGit(argv: string[]) {
+  return spawn.sync('git', argv, { stdio: 'inherit' })
+}
 
 export async function main() {
   const token = getInput(Input.TOKEN, { required: true })
@@ -49,17 +53,20 @@ export async function main() {
   endGroup()
 
   if (username) {
-    await Promise.all([
-      $`git config user.email ${username}@users.noreply.github.com`,
-      $`git config user.name "${username}"`
-    ])
+    runGit(['user.email', `${username}@users.noreply.github.com`])
+    runGit(['user.name', `"${username}"`])
   }
 
   const nameOnlyForLog =
     outFile.length > 24 ? `${outFile.slice(0, 21)}...` : outFile
-  await $`git add .`
-  await $`git commit -s -m \"docs: sync \`${nameOnlyForLog}\` from yuque.com\"`
-  await $`git push ${remoteOrigin}`
+  runGit(['add', '.'])
+  runGit([
+    'commit',
+    '-s',
+    '-m',
+    `"docs: sync \`${nameOnlyForLog}\` from yuque.com"`
+  ])
+  runGit(['push', remoteOrigin])
 
   info(`New data has been uploaded to remote git.`)
 }
