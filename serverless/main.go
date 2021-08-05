@@ -59,6 +59,8 @@ func dispatchGithubAction(ctx context.Context, request events.APIGatewayRequest)
 	defer logger.Sync()
 	sugar := logger.Sugar()
 
+	client := createGithubClient(ctx, GITHUB_PAT)
+
 	// regexp syntax, https://github.com/google/re2/wiki/Syntax
 	isAuthorizedMethod, unauthorizedMethodErr := regexp.MatchString(
 		// ignore letter case
@@ -76,18 +78,9 @@ func dispatchGithubAction(ctx context.Context, request events.APIGatewayRequest)
 	json.Unmarshal([]byte(request.Body), &yuQueData)
 
 	postMeta := yuQueData.Data
-	user, post := postMeta.User, postMeta.Body
+	post := postMeta.Body
 
-	docPathParts := []string{}
-	if postMeta.Path != "" {
-		docPathParts = append(docPathParts, postMeta.Path)
-	} else {
-		docPathParts = append(docPathParts, []string{
-			user.Login,         // username
-			postMeta.Book.Slug, // repository slug
-			postMeta.Slug,      // post slug
-		}...)
-	}
+	docPathParts := createDocPathParts(yuQueData)
 	docUrl := strings.Join(append([]string{YUQUE_HOST}, docPathParts...), "/")
 
 	sugar.Debug("YuQue post action: ", postMeta.ActionType)
@@ -96,10 +89,6 @@ func dispatchGithubAction(ctx context.Context, request events.APIGatewayRequest)
 
 	stringifiedBodyBytes, _ := json.MarshalIndent(post, "", "  ")
 	sugar.Debug("YuQue post body: ", string(stringifiedBodyBytes))
-
-	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: GITHUB_PAT})
-	tc := oauth2.NewClient(ctx, ts)
-	client := github.NewClient(tc)
 
 	clientPayload, err := serializeClientPayload(postMeta.Id, postMeta.Title, post, strings.Join(docPathParts, "/"))
 	if err != nil {
@@ -133,6 +122,28 @@ func dispatchGithubAction(ctx context.Context, request events.APIGatewayRequest)
 
 	sugar.Debug("Operation successfully: ", repo.HTMLURL)
 	return http.StatusText(http.StatusOK), nil
+}
+
+func createGithubClient(ctx context.Context, pat string) *github.Client {
+	tokenSource := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: pat})
+	tokenClient := oauth2.NewClient(ctx, tokenSource)
+	return github.NewClient(tokenClient)
+}
+
+func createDocPathParts(yuQueData *YuQueEvent) (docPathParts []string) {
+	postMeta := yuQueData.Data
+	user := postMeta.User
+
+	if postMeta.Path != "" {
+		docPathParts = append(docPathParts, postMeta.Path)
+	} else {
+		docPathParts = append(docPathParts, []string{
+			user.Login,         // username
+			postMeta.Book.Slug, // repository slug
+			postMeta.Slug,      // post slug
+		}...)
+	}
+	return
 }
 
 func serializeClientPayload(id yuque.YuQueId, title, post, filepath string) (msg json.RawMessage, err error) {
